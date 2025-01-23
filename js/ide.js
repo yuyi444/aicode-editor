@@ -125,6 +125,16 @@ function localStorageGetItem(key) {
 function showError(title, content) {
     $("#site-modal #title").html(title);
     $("#site-modal .content").html(content);
+
+    let reportTitle = encodeURIComponent(`Error on ${window.location.href}`);
+    let reportBody = encodeURIComponent(
+        `**Error Title**: ${title}\n` +
+        `**Error Timestamp**: \`${new Date()}\`\n` +
+        `**Origin**: ${window.location.href}\n` +
+        `**Description**:\n${content}`
+    );
+
+    $("#report-problem-btn").attr("href", `https://github.com/judge0/ide/issues/new?title=${reportTitle}&body=${reportBody}`);
     $("#site-modal").modal("show");
 }
 
