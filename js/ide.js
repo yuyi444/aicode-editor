@@ -1,4 +1,4 @@
-const API_KEY = ""; // Get yours for free at https://platform.sulu.sh/apis/judge0
+const API_KEY = ""; // Get yours at https://platform.sulu.sh/apis/judge0
 
 const AUTH_HEADERS = API_KEY ? {
     "Authorization": `Bearer ${API_KEY}`
@@ -145,6 +145,11 @@ function showHttpError(jqXHR) {
 function handleRunError(jqXHR) {
     showHttpError(jqXHR);
     $runBtn.removeClass("disabled");
+
+    window.top.postMessage(JSON.parse(JSON.stringify({
+        event: "runError",
+        data: jqXHR
+    })), "*");
 }
 
 function handleResult(data) {
@@ -164,6 +169,14 @@ function handleResult(data) {
     stdoutEditor.setValue(output);
 
     $runBtn.removeClass("disabled");
+
+    window.top.postMessage(JSON.parse(JSON.stringify({
+        event: "postExecution",
+        status: data.status,
+        time: data.time,
+        memory: data.memory,
+        output: output
+    })), "*");
 }
 
 async function getSelectedLanguage() {
@@ -214,6 +227,16 @@ function run() {
     };
 
     let sendRequest = function(data) {
+        window.top.postMessage(JSON.parse(JSON.stringify({
+            event: "preExecution",
+            source_code: sourceEditor.getValue(),
+            language_id: languageId,
+            flavor: flavor,
+            stdin: stdinEditor.getValue(),
+            compiler_options: compilerOptions,
+            command_line_arguments: commandLineArguments
+        })), "*");
+
         timeStart = performance.now();
         $.ajax({
             url: `${AUTHENTICATED_BASE_URL[flavor]}/submissions?base64_encoded=true&wait=false`,
@@ -388,13 +411,17 @@ async function loadSelectedLanguage(skipSetDefaultSourceCodeName = false) {
     }
 }
 
-function selectLanguageForExtension(extension) {
-    let language = getLanguageForExtension(extension);
-    let option = $selectLanguage.find(`[flavor=${language.flavor}][value=${language.language_id}]`);
+function selectLanguageByFlavorAndId(languageId, flavor) {
+    let option = $selectLanguage.find(`[value=${languageId}][flavor=${flavor}]`);
     if (option.length) {
         option.prop("selected", true);
         $selectLanguage.trigger("change", {skipSetDefaultSourceCodeName: true});
     }
+}
+
+function selectLanguageForExtension(extension) {
+    let language = getLanguageForExtension(extension);
+    selectLanguageByFlavorAndId(language.language_id, language.flavor);
 }
 
 async function getLanguage(flavor, languageId) {
@@ -571,6 +598,7 @@ $(document).ready(async function () {
         layout.on("initialised", function () {
             setDefaults();
             refreshLayoutSize();
+            window.top.postMessage({event: "initialised"}, "*");
         });
 
         layout.init();
@@ -591,6 +619,47 @@ $(document).ready(async function () {
             openFile(await (await gPuterFile.read()).text(), gPuterFile.name);
         });
     }
+
+    window.onmessage = function(e) {
+        if (!e.data) {
+            return;
+        }
+
+        if (e.data.action === "get") {
+            window.top.postMessage(JSON.parse(JSON.stringify({
+                event: "getResponse",
+                source_code: sourceEditor.getValue(),
+                language_id: getSelectedLanguageId(),
+                flavor: getSelectedLanguageFlavor(),
+                stdin: stdinEditor.getValue(),
+                stdout: stdoutEditor.getValue(),
+                compiler_options: $compilerOptions.val(),
+                command_line_arguments: $commandLineArguments.val()
+            })), "*");
+        } else if (e.data.action === "set") {
+            if (e.data.source_code) {
+                sourceEditor.setValue(e.data.source_code);
+            }
+            if (e.data.language_id && e.data.flavor) {
+                selectLanguageByFlavorAndId(e.data.language_id, e.data.flavor);
+            }
+            if (e.data.stdin) {
+                stdinEditor.setValue(e.data.stdin);
+            }
+            if (e.data.stdout) {
+                stdoutEditor.setValue(e.data.stdout);
+            }
+            if (e.data.compiler_options) {
+                $compilerOptions.val(e.data.compiler_options);
+            }
+            if (e.data.command_line_arguments) {
+                $commandLineArguments.val(e.data.command_line_arguments);
+            }
+            if (e.data.api_key) {
+                AUTH_HEADERS["Authorization"] = `Bearer ${e.data.api_key}`;
+            }
+        }
+    };
 });
 
 const DEFAULT_SOURCE = "\
