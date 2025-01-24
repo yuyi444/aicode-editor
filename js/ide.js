@@ -221,9 +221,10 @@ function run() {
             contentType: "application/json",
             data: JSON.stringify(data),
             headers: AUTH_HEADERS,
-            success: function (data) {
+            success: function (data, textStatus, request) {
                 console.log(`Your submission token is: ${data.token}`);
-                setTimeout(fetchSubmission.bind(null, flavor, data.token, 1), INITIAL_WAIT_TIME_MS);
+                let region = request.getResponseHeader('X-Judge0-Region');
+                setTimeout(fetchSubmission.bind(null, flavor, region, data.token, 1), INITIAL_WAIT_TIME_MS);
             },
             error: handleRunError
         });
@@ -251,7 +252,7 @@ function run() {
     }
 }
 
-function fetchSubmission(flavor, submission_token, iteration) {
+function fetchSubmission(flavor, region, submission_token, iteration) {
     if (iteration >= MAX_PROBE_REQUESTS) {
         handleRunError({
             statusText: "Maximum number of probe requests reached.",
@@ -262,10 +263,13 @@ function fetchSubmission(flavor, submission_token, iteration) {
 
     $.ajax({
         url: `${UNAUTHENTICATED_BASE_URL[flavor]}/submissions/${submission_token}?base64_encoded=true`,
+        headers: {
+            "X-Judge0-Region": region
+        },
         success: function (data) {
             if (data.status.id <= 2) { // In Queue or Processing
                 $statusLine.html(data.status.description);
-                setTimeout(fetchSubmission.bind(null, flavor, submission_token, iteration + 1), WAIT_TIME_FUNCTION(iteration));
+                setTimeout(fetchSubmission.bind(null, flavor, region, submission_token, iteration + 1), WAIT_TIME_FUNCTION(iteration));
             } else {
                 handleResult(data);
             }
