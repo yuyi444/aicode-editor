@@ -483,6 +483,8 @@ function refreshLayoutSize() {
 $(window).resize(refreshLayoutSize);
 
 $(document).ready(async function () {
+    $(".ui.dropdown").dropdown();
+
     refreshSiteContentHeight();
 
     console.log("Hey, Judge0 IDE is open-sourced: https://github.com/judge0/ide. Have fun!");
@@ -546,8 +548,6 @@ $(document).ready(async function () {
             setFontSizeForAllEditors(fontSize);
         }
     });
-
-    $(".ui.dropdown").dropdown();
 
     require(["vs/editor/editor.main"], function (ignorable) {
         layout = new GoldenLayout(layoutConfig, $("#site-content"));
