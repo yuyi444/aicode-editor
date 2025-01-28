@@ -559,6 +559,7 @@ $(document).ready(async function () {
                 scrollBeyondLastLine: true,
                 readOnly: state.readOnly,
                 language: "cpp",
+                fontFamily: "JetBrains Mono",
                 minimap: {
                     enabled: false
                 }
@@ -576,6 +577,7 @@ $(document).ready(async function () {
                 scrollBeyondLastLine: false,
                 readOnly: state.readOnly,
                 language: "plaintext",
+                fontFamily: "JetBrains Mono",
                 minimap: {
                     enabled: false
                 }
@@ -589,6 +591,7 @@ $(document).ready(async function () {
                 scrollBeyondLastLine: false,
                 readOnly: state.readOnly,
                 language: "plaintext",
+                fontFamily: "JetBrains Mono",
                 minimap: {
                     enabled: false
                 }
