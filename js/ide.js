@@ -25,7 +25,7 @@ const INITIAL_WAIT_TIME_MS = 0;
 const WAIT_TIME_FUNCTION = i => 100;
 const MAX_PROBE_REQUESTS = 50;
 
-var fontSize = 14;
+var fontSize = 13;
 
 var layout;
 
@@ -50,15 +50,11 @@ var layoutConfig = {
         showPopoutIcon: false,
         reorderEnabled: true
     },
-    dimensions: {
-        borderWidth: 3,
-        headerHeight: 22
-    },
     content: [{
-        type: "column",
+        type: "row",
         content: [{
             type: "component",
-            height: 70,
+            width: 66,
             componentName: "source",
             id: "source",
             title: "Source Code",
@@ -67,7 +63,7 @@ var layoutConfig = {
                 readOnly: false
             }
         }, {
-            type: "stack",
+            type: "column",
             content: [{
                 type: "component",
                 componentName: "stdin",
@@ -561,7 +557,7 @@ $(document).ready(async function () {
                 language: "cpp",
                 fontFamily: "JetBrains Mono",
                 minimap: {
-                    enabled: false
+                    enabled: true
                 }
             });
 
