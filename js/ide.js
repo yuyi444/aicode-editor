@@ -437,8 +437,6 @@ function setDefaults() {
     $statusLine.html("");
 
     loadSelectedLanguage();
-
-    sourceEditor.focus();
 }
 
 function clear() {
