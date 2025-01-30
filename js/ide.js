@@ -103,21 +103,6 @@ function decode(bytes) {
     }
 }
 
-function localStorageSetItem(key, value) {
-  try {
-    localStorage.setItem(key, value);
-  } catch (ignorable) {
-  }
-}
-
-function localStorageGetItem(key) {
-  try {
-    return localStorage.getItem(key);
-  } catch (ignorable) {
-    return null;
-  }
-}
-
 function showError(title, content) {
     $("#site-modal #title").html(title);
     $("#site-modal .content").html(content);
@@ -551,7 +536,6 @@ $(document).ready(async function () {
         layout.registerComponent("source", function (container, state) {
             sourceEditor = monaco.editor.create(container.getElement()[0], {
                 automaticLayout: true,
-                theme: "vs-dark",
                 scrollBeyondLastLine: true,
                 readOnly: state.readOnly,
                 language: "cpp",
@@ -569,7 +553,6 @@ $(document).ready(async function () {
         layout.registerComponent("stdin", function (container, state) {
             stdinEditor = monaco.editor.create(container.getElement()[0], {
                 automaticLayout: true,
-                theme: "vs-dark",
                 scrollBeyondLastLine: false,
                 readOnly: state.readOnly,
                 language: "plaintext",
@@ -583,7 +566,6 @@ $(document).ready(async function () {
         layout.registerComponent("stdout", function (container, state) {
             stdoutEditor = monaco.editor.create(container.getElement()[0], {
                 automaticLayout: true,
-                theme: "vs-dark",
                 scrollBeyondLastLine: false,
                 readOnly: state.readOnly,
                 language: "plaintext",
