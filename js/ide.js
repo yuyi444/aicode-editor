@@ -604,7 +604,7 @@ $(document).ready(async function () {
             gPuterFile = items[0];
             openFile(await (await gPuterFile.read()).text(), gPuterFile.name);
         });
-        applyMinimalStyle();
+        applyMinimalStyleMode();
     }
 
     window.onmessage = function (e) {
