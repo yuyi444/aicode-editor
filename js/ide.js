@@ -207,7 +207,7 @@ function run() {
         redirect_stderr_to_stdout: true
     };
 
-    let sendRequest = function(data) {
+    let sendRequest = function (data) {
         window.top.postMessage(JSON.parse(JSON.stringify({
             event: "preExecution",
             source_code: sourceEditor.getValue(),
@@ -331,9 +331,9 @@ async function save() {
 }
 
 function setFontSizeForAllEditors(fontSize) {
-    sourceEditor.updateOptions({fontSize: fontSize});
-    stdinEditor.updateOptions({fontSize: fontSize});
-    stdoutEditor.updateOptions({fontSize: fontSize});
+    sourceEditor.updateOptions({ fontSize: fontSize });
+    stdinEditor.updateOptions({ fontSize: fontSize });
+    stdoutEditor.updateOptions({ fontSize: fontSize });
 }
 
 async function loadLangauges() {
@@ -359,7 +359,7 @@ async function loadLangauges() {
                 }
             },
             error: reject
-        }).always(function() {
+        }).always(function () {
             $.ajax({
                 url: UNAUTHENTICATED_EXTRA_CE_BASE_URL + "/languages",
                 success: function (data) {
@@ -375,11 +375,11 @@ async function loadLangauges() {
                     }
                 },
                 error: reject
-                }).always(function() {
-                    options.sort((a, b) => a.text.localeCompare(b.text));
-                    $selectLanguage.append(options);
-                    resolve();
-                });
+            }).always(function () {
+                options.sort((a, b) => a.text.localeCompare(b.text));
+                $selectLanguage.append(options);
+                resolve();
+            });
         });
     });
 };
@@ -396,7 +396,7 @@ function selectLanguageByFlavorAndId(languageId, flavor) {
     let option = $selectLanguage.find(`[value=${languageId}][flavor=${flavor}]`);
     if (option.length) {
         option.prop("selected", true);
-        $selectLanguage.trigger("change", {skipSetDefaultSourceCodeName: true});
+        $selectLanguage.trigger("change", { skipSetDefaultSourceCodeName: true });
     }
 }
 
@@ -414,7 +414,7 @@ async function getLanguage(flavor, languageId) {
 
         $.ajax({
             url: `${UNAUTHENTICATED_BASE_URL[flavor]}/languages/${languageId}`,
-            success: function(data) {
+            success: function (data) {
                 if (!languages[flavor]) {
                     languages[flavor] = {};
                 }
@@ -509,24 +509,32 @@ $(document).ready(async function () {
     $statusLine = $("#status-line");
 
     $(document).on("keydown", "body", function (e) {
-        var keyCode = e.keyCode || e.which;
-        if ((e.metaKey || e.ctrlKey) && keyCode === 13) { // Ctrl+Enter, CMD+Enter
+        if (e.metaKey || e.ctrlKey) {
             e.preventDefault();
-            run();
-        } else if ((e.metaKey || e.ctrlKey) && keyCode === 83) { // Ctrl+S, CMD+S
-            e.preventDefault();
-            save();
-        } else if ((e.metaKey || e.ctrlKey) && keyCode === 79) { // Ctrl+O, CMD+O
-            e.preventDefault();
-            open();
-        } else if (e.ctrlKey && keyCode == 107) { // Ctrl++
-            e.preventDefault();
-            fontSize += 1;
-            setFontSizeForAllEditors(fontSize);
-        } else if (e.ctrlKey && keyCode == 109) { // Ctrl+-
-            e.preventDefault();
-            fontSize -= 1;
-            setFontSizeForAllEditors(fontSize);
+            switch (e.key) {
+                case "Enter": // Ctrl+Enter, Cmd+Enter
+                    run();
+                    break;
+                case "s": // Ctrl+S, Cmd+S
+                    save();
+                    break;
+                case "o": // Ctrl+O, Cmd+O
+                    open();
+                    break;
+                case "+": // Ctrl+Plus
+                case "=": // Some layouts use '=' for '+'
+                    fontSize += 1;
+                    setFontSizeForAllEditors(fontSize);
+                    break;
+                case "-": // Ctrl+Minus
+                    fontSize -= 1;
+                    setFontSizeForAllEditors(fontSize);
+                    break;
+                case "0": // Ctrl+0
+                    fontSize = 13;
+                    setFontSizeForAllEditors(fontSize);
+                    break;
+            }
         }
     });
 
@@ -546,8 +554,6 @@ $(document).ready(async function () {
             });
 
             sourceEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, run);
-            sourceEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, save);
-            sourceEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO, open);
         });
 
         layout.registerComponent("stdin", function (container, state) {
@@ -579,7 +585,7 @@ $(document).ready(async function () {
         layout.on("initialised", function () {
             setDefaults();
             refreshLayoutSize();
-            window.top.postMessage({event: "initialised"}, "*");
+            window.top.postMessage({ event: "initialised" }, "*");
         });
 
         layout.init();
@@ -595,13 +601,13 @@ $(document).ready(async function () {
     });
 
     if (PUTER) {
-        puter.ui.onLaunchedWithItems(async function(items){
+        puter.ui.onLaunchedWithItems(async function (items) {
             gPuterFile = items[0];
             openFile(await (await gPuterFile.read()).text(), gPuterFile.name);
         });
     }
 
-    window.onmessage = function(e) {
+    window.onmessage = function (e) {
         if (!e.data) {
             return;
         }
@@ -806,27 +812,27 @@ function getEditorLanguageMode(languageName) {
 }
 
 const EXTENSIONS_TABLE = {
-    "asm": {"flavor": CE, "language_id": 45}, // Assembly (NASM 2.14.02)
-    "c": {"flavor": CE, "language_id": 103}, // C (GCC 14.1.0)
-    "cpp": {"flavor": CE, "language_id": 105}, // C++ (GCC 14.1.0)
-    "cs": {"flavor": EXTRA_CE, "language_id": 29}, // C# (.NET Core SDK 7.0.400)
-    "go": {"flavor": CE, "language_id": 95}, // Go (1.18.5)
-    "java": {"flavor": CE, "language_id": 91}, // Java (JDK 17.0.6)
-    "js": {"flavor": CE, "language_id": 102}, // JavaScript (Node.js 22.08.0)
-    "lua": {"flavor": CE, "language_id": 64}, // Lua (5.3.5)
-    "pas": {"flavor": CE, "language_id": 67}, // Pascal (FPC 3.0.4)
-    "php": {"flavor": CE, "language_id": 98}, // PHP (8.3.11)
-    "py": {"flavor": EXTRA_CE, "language_id": 25}, // Python for ML (3.11.2)
-    "r": {"flavor": CE, "language_id": 99}, // R (4.4.1)
-    "rb": {"flavor": CE, "language_id": 72}, // Ruby (2.7.0)
-    "rs": {"flavor": CE, "language_id": 73}, // Rust (1.40.0)
-    "scala": {"flavor": CE, "language_id": 81}, // Scala (2.13.2)
-    "sh": {"flavor": CE, "language_id": 46}, // Bash (5.0.0)
-    "swift": {"flavor": CE, "language_id": 83}, // Swift (5.2.3)
-    "ts": {"flavor": CE, "language_id": 101}, // TypeScript (5.6.2)
-    "txt": {"flavor": CE, "language_id": 43}, // Plain Text
+    "asm": { "flavor": CE, "language_id": 45 }, // Assembly (NASM 2.14.02)
+    "c": { "flavor": CE, "language_id": 103 }, // C (GCC 14.1.0)
+    "cpp": { "flavor": CE, "language_id": 105 }, // C++ (GCC 14.1.0)
+    "cs": { "flavor": EXTRA_CE, "language_id": 29 }, // C# (.NET Core SDK 7.0.400)
+    "go": { "flavor": CE, "language_id": 95 }, // Go (1.18.5)
+    "java": { "flavor": CE, "language_id": 91 }, // Java (JDK 17.0.6)
+    "js": { "flavor": CE, "language_id": 102 }, // JavaScript (Node.js 22.08.0)
+    "lua": { "flavor": CE, "language_id": 64 }, // Lua (5.3.5)
+    "pas": { "flavor": CE, "language_id": 67 }, // Pascal (FPC 3.0.4)
+    "php": { "flavor": CE, "language_id": 98 }, // PHP (8.3.11)
+    "py": { "flavor": EXTRA_CE, "language_id": 25 }, // Python for ML (3.11.2)
+    "r": { "flavor": CE, "language_id": 99 }, // R (4.4.1)
+    "rb": { "flavor": CE, "language_id": 72 }, // Ruby (2.7.0)
+    "rs": { "flavor": CE, "language_id": 73 }, // Rust (1.40.0)
+    "scala": { "flavor": CE, "language_id": 81 }, // Scala (2.13.2)
+    "sh": { "flavor": CE, "language_id": 46 }, // Bash (5.0.0)
+    "swift": { "flavor": CE, "language_id": 83 }, // Swift (5.2.3)
+    "ts": { "flavor": CE, "language_id": 101 }, // TypeScript (5.6.2)
+    "txt": { "flavor": CE, "language_id": 43 }, // Plain Text
 };
 
 function getLanguageForExtension(extension) {
-    return EXTENSIONS_TABLE[extension] || {"flavor": CE, "language_id": 43}; // Plain Text (https://ce.judge0.com/languages/43)
+    return EXTENSIONS_TABLE[extension] || { "flavor": CE, "language_id": 43 }; // Plain Text (https://ce.judge0.com/languages/43)
 }
