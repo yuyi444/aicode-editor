@@ -463,7 +463,9 @@ $(window).resize(refreshLayoutSize);
 
 $(document).ready(async function () {
     $("#select-language").dropdown();
-    $("[data-content]").popup();
+    $("[data-content]").popup({
+        lastResort: "left center"
+    });
 
     refreshSiteContentHeight();
 
@@ -602,13 +604,7 @@ $(document).ready(async function () {
             gPuterFile = items[0];
             openFile(await (await gPuterFile.read()).text(), gPuterFile.name);
         });
-        document.querySelectorAll(".judge0-puter-hidden").forEach(e => {
-            e.style.display = "none";
-        });
-        document.querySelectorAll(".judge0-puter-visible").forEach(e => {
-            e.classList.remove("judge0-puter-visible");
-        });
-        document.getElementById("run-btn").classList.remove("judge0-run-btn");
+        applyMinimalStyle();
     }
 
     window.onmessage = function (e) {
