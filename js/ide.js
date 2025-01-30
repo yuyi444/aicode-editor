@@ -308,16 +308,16 @@ function saveFile(content, filename) {
     URL.revokeObjectURL(link.href);
 }
 
-async function open() {
+async function openAction() {
     if (PUTER) {
         gPuterFile = await puter.ui.showOpenFilePicker();
         openFile(await (await gPuterFile.read()).text(), gPuterFile.name);
     } else {
-        $("#open-file-input").click();
+        document.getElementById("open-file-input").click();
     }
 }
 
-async function save() {
+async function saveAction() {
     if (PUTER) {
         if (gPuterFile) {
             gPuterFile.write(sourceEditor.getValue());
@@ -462,7 +462,8 @@ function refreshLayoutSize() {
 $(window).resize(refreshLayoutSize);
 
 $(document).ready(async function () {
-    $(".ui.dropdown").dropdown();
+    $("#select-language").dropdown();
+    $("[data-content]").popup();
 
     refreshSiteContentHeight();
 
@@ -481,12 +482,6 @@ $(document).ready(async function () {
 
     $runBtn = $("#run-btn");
     $runBtn.click(run);
-
-    $saveBtn = $("#save-btn");
-    $saveBtn.click(save);
-
-    $openBtn = $("#open-btn");
-    $openBtn.click(open);
 
     $("#open-file-input").change(function (e) {
         const selectedFile = e.target.files[0];
@@ -594,8 +589,12 @@ $(document).ready(async function () {
         superKey = "Ctrl";
     }
 
-    [$runBtn, $saveBtn, $openBtn].forEach(btn => {
-        btn.attr("data-tooltip", `${superKey}${btn.attr("data-tooltip")}`);
+    [$runBtn].forEach(btn => {
+        btn.attr("data-content", `${superKey}${btn.attr("data-content")}`);
+    });
+
+    document.querySelectorAll(".description").forEach(e => {
+        e.innerText = `${superKey}${e.innerText}`;
     });
 
     if (PUTER) {
