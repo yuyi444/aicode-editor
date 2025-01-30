@@ -608,6 +608,7 @@ $(document).ready(async function () {
         document.querySelectorAll(".judge0-puter-visible").forEach(e => {
             e.classList.remove("judge0-puter-visible");
         });
+        document.getElementById("run-btn").classList.remove("judge0-run-btn");
     }
 
     window.onmessage = function (e) {
