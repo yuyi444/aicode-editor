@@ -602,6 +602,7 @@ $(document).ready(async function () {
             gPuterFile = items[0];
             openFile(await (await gPuterFile.read()).text(), gPuterFile.name);
         });
+        document.getElementById("judge0-puter-exit-btn").style.removeProperty("display");
     }
 
     window.onmessage = function (e) {
