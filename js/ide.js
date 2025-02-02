@@ -505,27 +505,32 @@ $(document).ready(async function () {
 
     $(document).on("keydown", "body", function (e) {
         if (e.metaKey || e.ctrlKey) {
-            e.preventDefault();
             switch (e.key) {
                 case "Enter": // Ctrl+Enter, Cmd+Enter
+                    e.preventDefault();
                     run();
                     break;
                 case "s": // Ctrl+S, Cmd+S
+                    e.preventDefault();
                     save();
                     break;
                 case "o": // Ctrl+O, Cmd+O
+                    e.preventDefault();
                     open();
                     break;
                 case "+": // Ctrl+Plus
                 case "=": // Some layouts use '=' for '+'
+                    e.preventDefault();
                     fontSize += 1;
                     setFontSizeForAllEditors(fontSize);
                     break;
                 case "-": // Ctrl+Minus
+                    e.preventDefault();
                     fontSize -= 1;
                     setFontSizeForAllEditors(fontSize);
                     break;
                 case "0": // Ctrl+0
+                    e.preventDefault();
                     fontSize = 13;
                     setFontSizeForAllEditors(fontSize);
                     break;
