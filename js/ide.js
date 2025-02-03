@@ -449,9 +449,7 @@ function clear() {
 }
 
 function refreshSiteContentHeight() {
-    $("#site-content").height(
-        $(window).height() - $("#site-navigation").outerHeight() - $("#site-footer").outerHeight()
-    );
+    $("#site-content").height($(window).height() - $("#site-navigation").outerHeight());
 }
 
 function refreshLayoutSize() {
@@ -501,7 +499,7 @@ $(document).ready(async function () {
         }
     });
 
-    $statusLine = $("#status-line");
+    $statusLine = $("#judge0-status-line");
 
     $(document).on("keydown", "body", function (e) {
         if (e.metaKey || e.ctrlKey) {
