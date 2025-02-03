@@ -104,8 +104,8 @@ function decode(bytes) {
 }
 
 function showError(title, content) {
-    $("#site-modal #title").html(title);
-    $("#site-modal .content").html(content);
+    $("#judge0-site-modal #title").html(title);
+    $("#judge0-site-modal .content").html(content);
 
     let reportTitle = encodeURIComponent(`Error on ${window.location.href}`);
     let reportBody = encodeURIComponent(
@@ -116,7 +116,7 @@ function showError(title, content) {
     );
 
     $("#report-problem-btn").attr("href", `https://github.com/judge0/ide/issues/new?title=${reportTitle}&body=${reportBody}`);
-    $("#site-modal").modal("show");
+    $("#judge0-site-modal").modal("show");
 }
 
 function showHttpError(jqXHR) {
@@ -449,7 +449,7 @@ function clear() {
 }
 
 function refreshSiteContentHeight() {
-    $("#site-content").height($(window).height() - $("#site-navigation").outerHeight());
+    $("#judge0-site-content").height($(window).height() - $("#judge0-site-navigation").outerHeight());
 }
 
 function refreshLayoutSize() {
@@ -537,7 +537,7 @@ $(document).ready(async function () {
     });
 
     require(["vs/editor/editor.main"], function (ignorable) {
-        layout = new GoldenLayout(layoutConfig, $("#site-content"));
+        layout = new GoldenLayout(layoutConfig, $("#judge0-site-content"));
 
         layout.registerComponent("source", function (container, state) {
             sourceEditor = monaco.editor.create(container.getElement()[0], {
