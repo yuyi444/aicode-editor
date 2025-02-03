@@ -449,7 +449,9 @@ function clear() {
 }
 
 function refreshSiteContentHeight() {
-    $("#judge0-site-content").height($(window).height() - $("#judge0-site-navigation").outerHeight());
+    const navigationHeight = $("#judge0-site-navigation").outerHeight();
+    $("#judge0-site-content").height($(window).height() - navigationHeight);
+    $("#judge0-site-content").css("padding-top", navigationHeight);
 }
 
 function refreshLayoutSize() {
