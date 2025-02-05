@@ -43,7 +43,6 @@ var $runBtn;
 var $statusLine;
 
 var timeStart;
-var timeEnd;
 
 var sqliteAdditionalFiles;
 var languages = {};
@@ -451,9 +450,11 @@ function clear() {
 }
 
 function refreshSiteContentHeight() {
-    const navigationHeight = $("#judge0-site-navigation").outerHeight();
-    $("#judge0-site-content").height($(window).height() - navigationHeight);
-    $("#judge0-site-content").css("padding-top", navigationHeight);
+    const navigationHeight = document.getElementById("judge0-site-navigation").offsetHeight;
+
+    const siteContent = document.getElementById("judge0-site-content");
+    siteContent.style.height = `${window.innerHeight}px`;
+    siteContent.style.paddingTop = `${navigationHeight}px`;
 }
 
 function refreshLayoutSize() {
@@ -461,9 +462,8 @@ function refreshLayoutSize() {
     layout.updateSize();
 }
 
-$(window).resize(refreshLayoutSize);
-
-$(document).ready(async function () {
+window.addEventListener("resize", refreshLayoutSize);
+document.addEventListener("DOMContentLoaded", async function () {
     $("#select-language").dropdown();
     $("[data-content]").popup({
         lastResort: "left center"
