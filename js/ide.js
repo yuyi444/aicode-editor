@@ -1,5 +1,4 @@
 import { IS_PUTER } from "./puter.js";
-import theme from "./theme.js";
 
 const API_KEY = ""; // Get yours at https://platform.sulu.sh/apis/judge0
 
@@ -613,7 +612,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    document.getElementById("judge0-theme-toggle-btn").addEventListener("click", theme.toggle);
     document.getElementById("judge0-open-file-btn").addEventListener("click", openAction);
     document.getElementById("judge0-save-btn").addEventListener("click", saveAction);
 
