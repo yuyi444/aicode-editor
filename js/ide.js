@@ -1,3 +1,6 @@
+import { IS_PUTER } from "./puter.js";
+import { toggleThemeMode } from "./ui.js";
+
 const API_KEY = ""; // Get yours at https://platform.sulu.sh/apis/judge0
 
 const AUTH_HEADERS = API_KEY ? {
@@ -87,7 +90,6 @@ var layoutConfig = {
     }]
 };
 
-const PUTER = puter.env === "app";
 var gPuterFile;
 
 function encode(str) {
@@ -309,7 +311,7 @@ function saveFile(content, filename) {
 }
 
 async function openAction() {
-    if (PUTER) {
+    if (IS_PUTER) {
         gPuterFile = await puter.ui.showOpenFilePicker();
         openFile(await (await gPuterFile.read()).text(), gPuterFile.name);
     } else {
@@ -318,7 +320,7 @@ async function openAction() {
 }
 
 async function saveAction() {
-    if (PUTER) {
+    if (IS_PUTER) {
         if (gPuterFile) {
             gPuterFile.write(sourceEditor.getValue());
         } else {
@@ -604,13 +606,16 @@ $(document).ready(async function () {
         e.innerText = `${superKey}${e.innerText}`;
     });
 
-    if (PUTER) {
+    if (IS_PUTER) {
         puter.ui.onLaunchedWithItems(async function (items) {
             gPuterFile = items[0];
             openFile(await (await gPuterFile.read()).text(), gPuterFile.name);
         });
-        applyStyleMode("standalone");
     }
+
+    document.getElementById("judge0-theme-toggle-btn").addEventListener("click", toggleThemeMode);
+    document.getElementById("judge0-open-file-btn").addEventListener("click", openAction);
+    document.getElementById("judge0-save-btn").addEventListener("click", saveAction);
 
     window.onmessage = function (e) {
         if (!e.data) {
