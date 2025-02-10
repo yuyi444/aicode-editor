@@ -178,7 +178,7 @@
     </div>
 
     <div id="judge0-chat-container" class="ui segment">
-        <div class="ui top attached borderless mini menu">
+        <div class="ui top attached borderless menu">
             <div class="right menu">
                 <div class="fitted item">
                     <select id="judge0-chat-model-select" class="ui search selection dropdown item">
@@ -203,8 +203,11 @@
         </div>
         <div id="judge0-chat-messages"></div>
         <div id="judge0-chat-input-container" class="ui basic segment">
-            <form id="judge0-chat-form" class="ui fluid transparent input">
-                <input id="judge0-chat-user-input" type="text" placeholder="Message AI">
+            <form id="judge0-chat-form" class="ui fluid action input">
+                <input id="judge0-chat-user-input" type="text">
+                <button id="judge0-chat-send-button" class="ui primary icon button" type="submit">
+                    <i class="arrow up icon"></i>
+                </button>
             </form>
         </div>
     </div>

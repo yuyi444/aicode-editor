@@ -70,7 +70,7 @@ var layoutConfig = {
                 height: 66,
                 componentName: "ai",
                 id: "ai",
-                title: "AI Coding Assistant",
+                title: "AI Assistant",
                 isClosable: false,
                 componentState: {
                     readOnly: false
