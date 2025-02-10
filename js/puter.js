@@ -19,8 +19,8 @@ async function uiSignIn() {
     userInput.disabled = false;
     userInput.placeholder = `Message ${modelSelect.value}`;
 
-    const sendButton = document.getElementById("judge0-chat-send-button");
-    sendButton.classList.remove("disabled");
+    document.getElementById("judge0-chat-send-button").disabled = false;
+    document.getElementById("judge0-inline-suggestions").disabled = false;
 }
 
 function uiSignOut() {
@@ -36,8 +36,8 @@ function uiSignOut() {
     userInput.disabled = true;
     userInput.placeholder = `Sign in to chat with ${modelSelect.value}`;
 
-    const sendButton = document.getElementById("judge0-chat-send-button");
-    sendButton.classList.add("disabled");
+    document.getElementById("judge0-chat-send-button").disabled = true;
+    document.getElementById("judge0-inline-suggestions").disabled = true;
 }
 
 function updateSignInUI() {
