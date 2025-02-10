@@ -39,3 +39,19 @@
 .ui.loading.segment:before {
     background: inherit !important;
 }
+
+.ui[class*="bottom center attached"].label {
+    border-radius: .28571429rem .28571429rem 0 0;
+    bottom: 0;
+    left: 50%;
+    position: fixed;
+    top: auto;
+    transform: translate(-50%);
+    width: fit-content;
+}
+
+.ui.label {
+    z-index: 1000;
+    font-family: "JetBrains Mono";
+    font-weight: normal;
+}
