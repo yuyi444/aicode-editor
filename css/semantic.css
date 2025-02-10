@@ -35,3 +35,7 @@
 .ui.selection.dropdown.item {
     border: none;
 }
+
+.ui.loading.segment:before {
+    background: inherit !important;
+}
