@@ -40,15 +40,15 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("judge0-chat-form").addEventListener("submit", async function (event) {
         event.preventDefault();
 
-        const sendButton = document.getElementById("judge0-chat-send-button");
-        sendButton.classList.add("loading");
-
         const userInput = document.getElementById("judge0-chat-user-input");
         const userInputValue = userInput.value.trim();
         if (userInputValue === "") {
             return;
         }
 
+        const sendButton = document.getElementById("judge0-chat-send-button");
+
+        sendButton.classList.add("loading");
         userInput.disabled = true;
 
         const userMessage = document.createElement("div");
